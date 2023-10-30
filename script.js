@@ -20,6 +20,7 @@ function showData(data) {
     output += `
     <li>
       <span><strong>${song.artist.name}</strong> - ${song.title}</span>
+      
       <button class="btn" data-artist="${song.artist.name}" data-songtitle="${song.title}">Get Lyrics</button>
     </li>
     `;
@@ -53,8 +54,15 @@ function showData(data) {
 async function getMoreSongs(url) {
   const res = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
   const data = await res.json();
-
   showData(data);
+}
+
+// Get lyrics  for song
+async function getLyrics(artist, songTitel){
+  const res = await fetch(`${apiURL}/v1/${artist}/${songTitel}`);
+  const data = await res.json();
+
+  console lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g), <br></br>;
 }
 
 // Event listener for the form submission
@@ -66,5 +74,17 @@ form.addEventListener("submit", (e) => {
     alert("Please type a search term");
   } else {
     searchSongs(searchTerm);
+  }
+});
+
+// Get lyrics button click
+result.addEventListener("click", (e) => {
+  const clickedEl = e.target;
+
+  if (clickedEl.tagName === "BUTTON") {
+    const artist = clickedEl.getAttribute("data-artist");
+    const songTitel = clickedEl.getAttribute("data-songtitle");
+
+    getLyrics(artist, songTitel);
   }
 });
